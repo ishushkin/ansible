@@ -1,0 +1,9 @@
+---
+- name: Prepare QUA hosts
+  hosts: qua_test,qua_dev,qua_prod
+  serial:
+    - 1
+    - 100%
+  roles:
+    - zabbix_agent
+

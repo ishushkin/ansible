@@ -1,0 +1,1 @@
+zabbix ALL=(ALL)  NOPASSWD: /sbin/service goferd restart, /bin/jps, /bin/cat /var/log/messages, /etc/zabbix/zabbix_agentd.d/scripts/user.param.sh *
