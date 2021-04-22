@@ -1,3 +1,16 @@
+[omega_jda_test]
+msk-rcod-jda007
+msk-rcod-jda008
+
+[omega_db_test]
+msk-rcod-ora007
+
+[bct_test]
+bctcidb
+
+[bcx_test]
+bcxcidb
+
 [vios_hosts]
 
 [aix_dev]
@@ -59,3 +72,5 @@ sc0cidb
 [qua_prod]
 sc2cidb
 
+[gw0_dev]
+msk-gw0cidb-new

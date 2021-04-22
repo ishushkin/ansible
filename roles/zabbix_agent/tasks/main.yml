@@ -18,7 +18,7 @@
 - name: Configure HostMetadata in /etc/zabbix/zabbix_agentd.conf
   lineinfile:
     regexp: "^HostMetadata="
-    line: "HostMetadata={{ zabbix_host_metadata }}, Hardware {{ zabbix_host_hardware }}, OS {{ zabbix_host_os }}, App {{ zabbix_host_app }}, SubApp {{ zabbix_host_subapp }}, Env {{ zabbix_host_env }}"
+    line: "HostMetadata={{ zabbix_host_metadata }}, Hardware {{ zabbix_host_hardware }}, OS {{ zabbix_host_os }}, App {{ zabbix_host_app }}, SubApplication {{ zabbix_host_subapp }}, Env {{ zabbix_host_env }}"
     path: /etc/zabbix/zabbix_agentd.conf
   notify:
     - restart zabbix_agent

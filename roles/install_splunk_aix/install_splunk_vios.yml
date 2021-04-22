@@ -1,0 +1,69 @@
+---
+- name: Install splunk on AIX host
+  hosts: temp_hosts
+  gather_facts: no
+  serial: 1
+  vars:
+    splunk_user: admin
+    splunk_password: hxzYQt1ZknoBIwsJENIq
+    splunk_agent_port: 8099
+    splunk_server: 192.168.228.149
+    splunk_server_port: 8089
+
+  tasks:
+
+#    - name: Copy splunk rpm
+#      copy:
+#        src: files/splunkforwarder-8.1.3-63079c59e632-AIX-powerpc.tgz
+#        dest: /tmp/splunkforwarder-8.1.3-63079c59e632-AIX-powerpc.tgz
+
+    - name: Install splunk agent
+      raw: "gunzip -c /tmp/splunkforwarder-8.1.3-63079c59e632-AIX-powerpc.tgz | tar xvf - -C /opt"
+
+    - name: Stop splunk
+      raw: "/opt/splunkforwarder/bin/splunk stop"
+      ignore_errors: true
+
+    - name: Enable boot-start
+      raw: '/opt/splunkforwarder/bin/splunk enable boot-start -user root --accept-license --answer-yes --no-prompt'
+
+    - name: Add user admin
+      raw: "/opt/splunkforwarder/bin/splunk add user {{ splunk_user }} -password {{ splunk_password }} -role admin"
+      ignore_errors: true
+
+    - name: Set splunk port
+      raw: "/opt/splunkforwarder/bin/splunk set splunkd-port {{ splunk_agent_port }}"
+      ignore_errors: true
+
+    - name: Set splunk server
+      raw: "/opt/splunkforwarder/bin/splunk set deploy-poll {{ splunk_server }}:{{ splunk_server_port }}"
+      ignore_errors: true
+
+#    - name: Get clustername
+#      shell: hostname
+#      register: clustername_var
+#
+#    - name: Get hostname
+#      shell: lsattr -l inet0 -a hostname -F value
+#      register: hostname_var
+#
+#    - name: Replace cluster name to server name 1
+#      lineinfile:
+#        path: /opt/splunkforwarder/etc/system/local/inputs.conf
+#        regexp: "^serverName"
+#        create: false
+#        line: "serverName = {{ hostname_var.stdout_lines[0] }}"
+#      ignore_errors: true
+#
+#
+#    - name: Replace cluster name to server name 2
+#      lineinfile:
+#        path: /opt/splunkforwarder/etc/system/local/server.conf
+#        regexp: "^serverName"
+#        line: "serverName = {{ hostname_var.stdout_lines[0] }}"
+
+    - name: Start splunk
+      raw: "/opt/splunkforwarder/bin/splunk start"
+
+
+

@@ -1,0 +1,181 @@
+---
+- name: Disable some services
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - firewalld
+    - NetworkManager
+
+- name: Disable SELINUX
+  selinux:
+    state: disabled      
+
+- name: Unregister with Satellite
+  redhat_subscription:
+    state: absent
+  ignore_errors: true
+
+- name: Clean yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: absent
+
+- name: Create yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+
+- name: Add temporary repo from ansible host
+  yum_repository:
+    name: temp_x5
+    description: Temp X5 Repo
+    file: ansible_repos
+    baseurl: ftp://msk-sap-ans001.x5.ru/pub/rhel7.6/
+    gpgcheck: no
+
+
+- name: Copy subscription manager RPMs
+  copy:
+    src: /share/pub/Distr/Centos_RPMS/rpms/
+    dest: /tmp
+
+- name: Install subscription manager RPMs
+  shell: yum localinstall -y /tmp/subscription-manager* /tmp/python-syspurpose*
+
+- name: Clean yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: absent
+
+- name: Create yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+
+- name: Install katello
+  shell: yum localinstall -y http://msk-dpro-upd005.x5.ru/pub/katello-ca-consumer-latest.noarch.rpm
+
+- name: Register with Satellite
+  redhat_subscription:
+    activationkey: "Centos 7.7"
+    org_id: "X5_Retail_Group"
+
+- name: Add HDP repo
+  copy:
+    src: files/repos/ambari-hdp-2.repo
+    dest: /etc/yum.repos.d/ambari-hdp-2.repo
+
+- name: Install packages
+  yum:
+    name:
+      - chrony
+      - python-devel*
+      - gcc*
+      - openssl
+
+- name: Ensure group hadoop is present
+  group:
+    name: hadoop
+    gid: 1002
+    state: present
+
+- name: Ensure ambari user is present
+  user:
+    name: ambari
+    uid: 1004
+    group: hadoop
+    comment: Ambari user
+    home: /home/ambari
+    shell: /bin/bash
+
+- name: Grant sudo access for ambari user
+  copy:
+    content: "ambari  ALL=(ALL)  NOPASSWD: ALL\n"
+    dest: /etc/sudoers.d/10_x5-ambari
+    mode: 0440
+
+- name: Ensure other sudoers.d files exist
+  copy:
+    src: files/sudoers.d/
+    dest: /etc/sudoers.d
+    mode: 0440
+
+- name: Enable Time Sync using Chronyc
+  copy:
+    src: files/chrony.conf
+    dest: /etc/chrony.conf
+
+- name: Enable Chrony Service
+  service:
+    name: chronyd.service
+    state: restarted
+    enabled: true
+
+- name: Copy /etc/security/limits.conf
+  copy:
+    src: files/limits.conf
+    dest: /etc/security/limits.conf
+
+- name: Copy /etc/security/limits.d
+  copy:
+    src: files/limits.d/
+    dest: /etc/security/limits.d
+
+- name: Install JAVA
+  shell: yum localinstall -y /tmp/jdk-8u221-linux-x64.rpm
+
+- name: Set JAVA_HOME
+  blockinfile:
+    path: /etc/bashrc
+    block: |
+      export JAVA_HOME=/usr/java/jdk1.8.0_221-amd64
+      export PATH=$PATH:/usr/local/bin:/usr/bin:/opt/puppetlabs/bin:/usr/java/jdk1.8.0_221-amd64/bin
+
+- name: Configure disks
+  parted:
+    device: "/dev/sd{{ item.value.dev }}"
+    label: gpt
+    number: 1
+    part_start: 1MB
+    part_end: 2400GB
+    part_type: primary
+    state: present
+  loop: "{{ lookup('dict', dev_names) }}"
+
+- name: Create filesystems
+  filesystem:
+    dev: "/dev/sd{{ item.value.dev }}1"
+    fstype: xfs
+  loop: "{{ lookup('dict', dev_names) }}"
+
+- name: Update facts
+  setup:
+
+- name: Update fstab
+  blockinfile:
+    path: /etc/fstab
+    block: |
+      UUID={{ ansible_devices.sdh.partitions.sdh1.uuid }} /mnt/grid/0             xfs     defaults        0 0
+      UUID={{ ansible_devices.sdg.partitions.sdg1.uuid }} /mnt/grid/1             xfs     defaults        0 0
+      UUID={{ ansible_devices.sdf.partitions.sdf1.uuid }} /mnt/grid/2             xfs     defaults        0 0
+      UUID={{ ansible_devices.sde.partitions.sde1.uuid }} /mnt/grid/3             xfs     defaults        0 0
+      UUID={{ ansible_devices.sdd.partitions.sdd1.uuid }} /mnt/grid/4             xfs     defaults        0 0
+      UUID={{ ansible_devices.sdc.partitions.sdc1.uuid }} /mnt/grid/5             xfs     defaults        0 0
+      UUID={{ ansible_devices.sdb.partitions.sdb1.uuid }} /mnt/grid/6             xfs     defaults        0 0
+      UUID={{ ansible_devices.sda.partitions.sda1.uuid }} /mnt/grid/7             xfs     defaults        0 0
+
+
+- name: Create dirs
+  file:
+    path: "/mnt/grid/{{ item.value.name }}"
+    state: directory
+  loop: "{{ lookup('dict', dev_names) }}"
+
+- name: Mount up devices
+  shell: mount -a
+
+- name: Reboot host
+  reboot:
+  tags: never

@@ -1,6 +1,6 @@
 ---
 - name: Prepare QUA hosts
-  hosts: qua_test,qua_dev,qua_prod
+  hosts: qua_test,qua_dev,qua_prod,abap_test,abap_dev,abap_prod
   serial:
     - 1
     - 100%

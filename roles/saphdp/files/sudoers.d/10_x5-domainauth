@@ -1,0 +1,2 @@
+%g-x5-linux-root               ALL=(ALL) NOPASSWD: ALL
+%g-x5-msk-dtln-saphdp-015-sudo               ALL=(ALL) NOPASSWD: ALL

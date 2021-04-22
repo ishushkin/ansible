@@ -1,0 +1,54 @@
+---
+- name: Prepare new SAPHDP server for production operation
+  hosts: msk-dtln-saphdp-027
+  vars:
+    dir_names:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+
+    disk_names:
+      - a
+      - b
+      - c
+      - d
+      - e
+      - f
+      - g
+      - h
+
+    dev_names:
+      h:
+        name: 0
+        dev: h
+      g:
+        name: 1
+        dev: g
+      f:
+        name: 2
+        dev: f
+      e:
+        name: 3
+        dev: e
+      d:
+        name: 4
+        dev: d
+      c:
+        name: 5
+        dev: c
+      b:
+        name: 6
+        dev: b
+      a:
+        name: 7
+        dev: a
+
+  roles:
+    - saphdp
+
+
