@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+  - name: 'remove logs rsyslog.conf'
+    lineinfile:
+         path: /etc/rsyslog.conf
+         backup: yes
+         regexp: '^(.*)logs(.*)10514*'
+         state: absent
+
+  - name: 'remove logs logstash.conf'
+    lineinfile:
+         path: /etc/rsyslog.d/logstash.conf
+         backup: yes
+         regexp: '^(.*)logs(.*)10514*'
+         state: absent

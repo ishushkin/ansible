@@ -1,16 +1,10 @@
 ---
 - name: Install splunk on VIOS host
-  hosts: vios_hosts
+  hosts: 78B613X-Vios1,78B613X-Vios2
   gather_facts: no
   serial:
     - 1
     - 100%
-  vars:
-    splunk_user: admin
-    splunk_password: hxzYQt1ZknoBIwsJENIq
-    splunk_agent_port: 8099
-    splunk_server: 192.168.228.149
-    splunk_server_port: 8089
 
   roles:
     - install_splunk_vios

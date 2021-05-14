@@ -9,15 +9,61 @@ msk-rcod-ora007
 bctcidb
 
 [bcx_test]
-bcxcidb
+bcxcidb splunk_agent_port=1012
 
 [vios_hosts]
+78B60FX-Vios1
+78B60FX-Vios2
+78B610X-Vios1
+78B610X-Vios2
+78B611X-Vios1
+78B611X-Vios2
+78B612X-Vios1
+78B612X-Vios2
+78B613X-Vios1
+78B613X-Vios2
+78B614X-Vios1
+78B614X-Vios2
+78B615X-Vios1
+78B615X-Vios2
+78B616X-Vios1
+78B616X-Vios2
+78B617X-Vios1
+78B617X-Vios2
 
 [aix_dev]
 
 [aix_test]
 
 [aix_prod]
+cn2cidb-1
+cn2cidb-2
+er2-ads
+er2bkp
+er2cidb-1
+er2cidb-2
+er2stb
+gr2cidb-1
+gr2cidb-2
+msk-rcod-jda001
+msk-rcod-jda002
+msk-rcod-jda003
+msk-rcod-jda004
+msk-rcod-jda005
+msk-rcod-jda007
+msk-rcod-jda008
+msk-rcod-ora007
+msk-rcod-ora008
+msk-rcod-ora009
+msk-rcod-ora010
+msk-sap-strnode001
+nimsrv
+pd2cidb-1
+pd2cidb-2
+sl2cidb-1
+sl2cidb-2
+sm2cidb-1
+sm2cidb-2
 
 [aix_hosts:children]
 aix_dev
@@ -37,9 +83,11 @@ linux_prod
 abap_test
 qua_dev
 qua_prod
+gw0_dev
 
 [linux_dev:children]
 qua_dev
+gw0_dev
 
 
 [linux_test:children]
@@ -54,6 +102,8 @@ linux_sap_hosts
 [linux_sap_hosts:children]
 abap
 qua
+bcx_test
+linux_other_hosts
 
 [abap:children]
 abap_test
@@ -73,4 +123,51 @@ sc0cidb
 sc2cidb
 
 [gw0_dev]
-msk-gw0cidb-new
+msk-gw0cidb zabbix_host_subapp=GW0
+
+[linux_other_hosts]
+ar1cidb
+ar2cidb
+arccidb
+bctcidb
+bi2arc
+cc2cidb
+cn1ap01
+cn2ap01
+cn2ap02
+er1enqv
+er2enqv
+er5ap01
+er5ap02
+er8cidb
+ea1ads
+ea2ads
+gr1ap01
+gr2ap01
+msk-sap-ans002
+msk-sap-ipm001
+msk-sap-nmc
+msk-sap-nws
+msk-sap-shr001
+msk-sap-vpx001
+pe7cidb
+pe8cidb
+pe9cidb
+sl1ap01
+sl1wl01
+sl2ap01
+sl2ap02
+sl2wl01
+ts1trex
+ts2trex
+tx3cidb
+tstbkp02
+pd1ap03
+pd1ap04
+lmxcidb
+msk-sap-frm001
+msk-sap-jmp002
+msk-gw0cidb
+
+[hr_ap_hosts]
+hr1ap02

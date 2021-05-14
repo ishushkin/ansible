@@ -1,4 +1,10 @@
 ---
+- name: restart chronyd
+  service:
+    name: chronyd.service
+    state: restarted
+    enabled: true
+
 - name: restart ntpd
   service:
     name: ntpd.service

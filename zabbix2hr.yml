@@ -1,6 +1,6 @@
 ---
 - name: Prepare QUA hosts
-  hosts: gw0_dev
+  hosts: hr_ap_hosts
   serial:
     - 1
     - 100%

@@ -30,6 +30,7 @@
       - zabbix-agent
       - mc
       - ntp
+      - telnet
       - compat-libstdc++-33
       - libstdc++
       - libstdc++-devel
@@ -71,10 +72,11 @@
       - transfig
       - zlib
       - uuidd
+    state: installed
 
 - name: Copy SAP RPMs
   copy:
-    src: /share/pub/Distr/SAP_RPMS/sap_rpms/
+    src: /share/pub/Distr/SAP_RPMS/
     dest: /tmp/sap_rpms/
 
 - name: Install SAP RPMs
@@ -104,19 +106,7 @@
       - resource-agents-sap
       - tuned-profiles-sap
       - sapconf
-
-
-- name: Enable Time Sync using Chronyc
-  copy:
-    src: files/chrony.conf
-    dest: /etc/chrony.conf
-  notify: restart chronyd
-
-- name: Enable Chrony Service
-  service:
-    name: chronyd.service
-    state: started
-    enabled: true
+    state: installed
 
 - name: Enable Time Sync using NTPD
   copy:
@@ -242,4 +232,3 @@
 - name: Reboot host
   reboot:
   tags: never
-
