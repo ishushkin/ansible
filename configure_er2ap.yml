@@ -1,0 +1,79 @@
+---
+- name: Create new FS on SAP ER2 App Servers
+  hosts: er2_app_hosts
+  serial: 1
+  tasks:
+
+  - name: Rescan LUNS
+    shell: echo "- - -" > /sys/class/scsi_host/host{{ item }}/scan
+    loop:
+      - 0
+      - 1
+      - 2
+
+  - name: Configure multipathd
+    shell: mpathconf --enable    
+
+  - name: Enable multipathd
+    service:
+      name: multipathd
+      state: restarted
+      enabled: yes
+
+  - name: Configure disks
+    parted:
+      device: "/dev/mapper/{{ item }}"
+      label: gpt
+      number: 1
+      part_start: 1MB
+      part_type: primary
+      flags: [ lvm ]
+      state: present
+    loop:
+      - mpatha
+      - mpathb
+
+  - name: Run partprobe
+    shell: partprobe
+    ignore_errors: true
+
+  - name: Create VG
+    lvg:
+      vg: "vg_{{ sap_instance }}"
+      pvs:
+        - /dev/mapper/mpatha1
+        - /dev/mapper/mpathb1
+
+  - name: Create LV
+    lvol:
+      lv: "lv_{{ sap_instance }}"
+      vg: "vg_{{ sap_instance }}"
+      size: 100%FREE
+      opts: "-m 1"
+  
+  - name: Create filesystems
+    filesystem:
+      dev: "/dev/vg_{{ sap_instance }}/lv_{{ sap_instance }}"
+      fstype: ext4
+  
+  - name: Make Directory
+    file:
+      path: "/usr/sap/ER2/{{ sap_instance }}_LOCAL"
+      state: directory
+  
+  - name: Mount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance }}_LOCAL"
+      src: "/dev/vg_{{ sap_instance }}/lv_{{ sap_instance }}"
+      state: mounted
+      fstype: ext4
+
+  - name: Add to fstab
+    lineinfile:
+      backup: yes
+      line: "/dev/vg_{{ sap_instance }}/lv_{{ sap_instance }} /usr/sap/ER2/{{ sap_instance }}_LOCAL ext4 defaults 1 2"
+      path: /etc/fstab
+      regexp: "^/dev/vg_{{ sap_instance }}"
+    tags:
+      - fstab
+

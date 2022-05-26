@@ -1,0 +1,5 @@
+gd2adm:x:302:300:SAP System Administrator:/home/gd2adm:/bin/csh
+sapadm:x:502:300:SAP System Administrator:/home/sapadm:/bin/false
+gd1adm:x:303:300:SAP System Administrator:/home/gd1adm:/bin/csh
+wg1adm:x:330:300:SAP System Administrator:/home/wg1adm:/bin/csh
+da1adm:x:333:300:SAP System Administrator:/home/da1adm:/bin/csh

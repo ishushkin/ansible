@@ -1,0 +1,3 @@
+---
+- name: restart zabbix_agent
+  shell: /etc/rc.d/init.d/zabbix-agent stop; sleep 2; /etc/rc.d/init.d/zabbix-agent start

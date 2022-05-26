@@ -1,0 +1,34 @@
+#Created by Ansible
+kernel.msgmni = 1024
+kernel.sem = 1250 256000 100 1024
+vm.max_map_count = 2000000
+#Define shmmax as RAM size in bytes
+kernel.shmmax = {{ ( ansible_memtotal_mb  | int ) * 1024 * 1024 }}
+#Define shmall as RAM+SWAP in 4k blocks
+kernel.shmall = {{ (( ansible_swaptotal_mb  | int ) + ( ansible_memtotal_mb  | int )) * 256 }}
+fs.aio-max-nr = 1048576
+
+###
+net.ipv4.ip_forward = 0
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+kernel.sysrq = 0
+kernel.core_uses_pid = 1
+net.ipv4.tcp_syncookies = 1
+kernel.msgmnb = 65536
+kernel.msgmax = 65536
+
+
+# Disable netfilter on bridges.
+net.bridge.bridge-nf-call-ip6tables = 0
+net.bridge.bridge-nf-call-iptables = 0
+net.bridge.bridge-nf-call-arptables = 0
+
+#SAP
+fs.file-max = 6815744
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.wmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_max = 1048576
+kernel.shmmni = 4096

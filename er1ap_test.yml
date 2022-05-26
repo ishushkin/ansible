@@ -1,0 +1,9 @@
+---
+- name: Exchange local D* filesystems
+  hosts: er1_app_hosts
+#  hosts: er1ap44
+  tasks:
+
+    - name: Get lvol list from inventory
+      set_fact: lvol_list="{{ lvols.split(',') }}"
+

@@ -1,0 +1,43 @@
+[rhel-7-server-extras-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-extras-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-extras-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-optional-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-optional-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-optional-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-rh-common-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-rh-common-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-rh-common-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-satellite-tools-6.6-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-satellite-tools-6.6-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-satellite-tools-6.6-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-supplementary-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-supplementary-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-supplementary-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+[rhel-7-server-thirdparty-oracle-java-rpms]
+baseurl=http://infrax-rh-mrepo.x5.ru/rhel-7-server-thirdparty-oracle-java-rpms
+enabled=1
+gpgcheck=1
+name= infrax-rh-mrepo.x5.ru - rhel-7-server-thirdparty-oracle-java-rpms
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+

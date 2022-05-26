@@ -3,10 +3,11 @@
 #  debug:
 #    var: "{{ item }}"
 #  loop: "{{ ansible_mounts | flatten}}"
-#  when: item.size_total > 1062443943936 and item.fstype == "ext4"
+#  when: 
+#    - item.size_total is defined and item.size_total > 1062443943936 and item.fstype == "ext4"
 
 - name: Change reserved space to {{ ext4_rsrv_space_percent }}% for EXT4 FS larger than {{ ext4_rsrv_space_threshold }} bytes
   shell: tune2fs -m {{ ext4_rsrv_space_percent }} {{ item.device }}
   loop: "{{ ansible_mounts | flatten}}"
-  when: item.size_total > ext4_rsrv_space_threshold and item.fstype == "ext4"
+  when: item.size_total is defined and item.size_total > ext4_rsrv_space_threshold and item.fstype == "ext4"
 

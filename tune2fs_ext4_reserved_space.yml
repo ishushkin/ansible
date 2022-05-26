@@ -1,6 +1,10 @@
 ---
 - name: Use tune2fs to tune reserved space in EXT4 filesystems
-  hosts: bctcidb
+  hosts: fk5ap01,fk5ap02,fk1ap01,fk1ap02
+  serial:
+    - 1
+    - 10%
+    - 100%
   vars:
     ext4_rsrv_space_percent: 1
     ext4_rsrv_space_threshold: 10737418240

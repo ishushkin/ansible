@@ -1,0 +1,53 @@
+---
+- hosts: sr2cidb-new 
+  become: true
+
+  tasks:
+  - name: get user uid
+    getent:
+      database: passwd
+      split: ':'
+#  - debug:
+#      msg: 'host {{ ansible_hostname }} user {{ item }} has uid {{ getent_passwd[item][1] }}'
+#    loop: "{{ x5_users }}"
+#    vars:
+#      x5_users: "{{ getent_passwd.keys()|list }}"
+
+  - name: get group gid
+    getent:
+      database: group
+      split: ':'
+#  - debug:
+#      msg: 'host {{ ansible_hostname }} group {{ item }} has gid {{ getent_group[item][1] }}'
+#    loop: "{{ x5_group }}"
+#    vars:
+#      x5_group: "{{ getent_group.keys()|list }}"
+
+  - name: ensure files exist
+    file:
+      path: /root/croc/"{{ item }}"
+      state: touch
+    with_items:
+      - ansible_user_test
+      - ansible_group_test
+    delegate_to: 127.0.0.1
+
+  - name: run command to save to file
+    lineinfile:
+      path: /root/croc/ansible_user_test
+      line: "{{ ansible_hostname }}:{{ item }}:{{ getent_passwd[item][1] }}"
+      state: present
+    loop: "{{ x5users }}"
+    vars:
+      - x5users: "{{ getent_passwd.keys()|list }}"
+    delegate_to: 127.0.0.1
+
+  - name: save groups to file
+    lineinfile:
+      path: /root/croc/ansible_group_test
+      line: "{{ ansible_hostname }}:{{ item }}:{{ getent_group[item][1] }}"
+      state: present
+    loop: "{{ x5groups }}"
+    vars:
+      - x5groups: "{{ getent_group.keys()|list }}"
+    delegate_to: 127.0.0.1

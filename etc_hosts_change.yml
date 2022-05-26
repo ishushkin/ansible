@@ -1,0 +1,17 @@
+---
+- name: Deploy changes in /etc/hosts
+  hosts: test/dev/prod
+  become: true
+
+  pre_tasks:
+    - name: backup current /etc/hosts file
+      copy:
+           src: /etc/hosts
+           dest: /etc/hosts.{{ ansible_date_time.date }}
+           owner: root
+           group: root
+           mode: 0644
+           remote_src: yes
+
+  roles:
+    - etc_hosts

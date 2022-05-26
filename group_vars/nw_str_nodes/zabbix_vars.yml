@@ -1,0 +1,7 @@
+---
+zabbix_host_hardware: "iDrac"
+zabbix_host_os: "Linux Server"
+zabbix_host_app: "Networker"
+zabbix_host_subapp: "Storage Node"
+zabbix_host_env: "Prod"
+

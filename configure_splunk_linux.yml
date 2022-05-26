@@ -1,6 +1,6 @@
 ---
 - name: Install splunk on RedHat/CentOS host
-  hosts: linux_other_hosts
+  hosts: fk5ap01,fk5ap02,fk1ap01,fk1ap02
   serial:
     - 1
     - 100%

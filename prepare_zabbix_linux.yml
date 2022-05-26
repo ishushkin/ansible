@@ -1,0 +1,9 @@
+---
+- name: Install Zabbix on Linux Host
+  hosts: fk5ap01,fk5ap02,fk1ap01,fk1ap02
+  serial:
+    - 1
+    - 100%
+  roles:
+    - zabbix_agent_linux
+

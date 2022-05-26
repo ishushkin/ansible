@@ -1,0 +1,9 @@
+---
+- name: Install Zabbix on AIX Host
+  hosts: msk-sap-strnode002
+  serial:
+    - 1
+    - 100%
+  roles:
+    - zabbix_agent_aix
+

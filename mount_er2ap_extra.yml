@@ -1,0 +1,56 @@
+---
+- name: Create new FS on SAP ER2 App Servers
+  hosts: er2_app_extra
+  serial: 2
+  tasks:
+
+  - name: UnMount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance }}"
+      state: absent
+
+  - name: UnMount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance2 }}"
+      state: absent
+
+  - name: UnMount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance }}_LOCAL"
+      state: absent
+
+  - name: UnMount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance2 }}_LOCAL"
+      state: absent
+
+
+
+  - name: Mount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance }}"
+      src: "/dev/vg_{{ sap_instance }}/lv_{{ sap_instance }}"
+      state: mounted
+      fstype: ext4
+
+  - name: Mount device
+    mount:
+      path: "/usr/sap/ER2/{{ sap_instance2 }}"
+      src: "/dev/vg_{{ sap_instance2 }}/lv_{{ sap_instance2 }}"
+      state: mounted
+      fstype: ext4
+
+
+  - name: Add to fstab
+    lineinfile:
+      backup: yes
+      line: "/dev/vg_{{ sap_instance }}/lv_{{ sap_instance }} /usr/sap/ER2/{{ sap_instance }} ext4 defaults 1 2"
+      path: /etc/fstab
+      regexp: "^/dev/vg_{{ sap_instance }}*"
+
+  - name: Add to fstab two
+    lineinfile:
+      backup: yes
+      line: "/dev/vg_{{ sap_instance2 }}/lv_{{ sap_instance2 }} /usr/sap/ER2/{{ sap_instance2 }} ext4 defaults 1 2"
+      path: /etc/fstab
+      regexp: "^/dev/vg_{{ sap_instance2 }}*"

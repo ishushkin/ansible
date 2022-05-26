@@ -1,0 +1,60 @@
+---
+- name: Configure Server in /etc/zabbix/zabbix_agentd.conf
+  lineinfile:
+    regexp: "^Server="
+    line: "Server={{ zabbix_server_1 }},{{ zabbix_server_2 }}"
+    path: /etc/zabbix/zabbix_agentd.conf
+  notify:
+    - restart zabbix_agent
+
+- name: Configure ServerActive in /etc/zabbix/zabbix_agentd.conf
+  lineinfile:
+    regexp: "^ServerActive="
+    line: "ServerActive={{ zabbix_server_1 }}"
+    path: /etc/zabbix/zabbix_agentd.conf
+  notify:
+    - restart zabbix_agent
+
+- name: Configure HostMetadata in /etc/zabbix/zabbix_agentd.conf
+  lineinfile:
+    regexp: "^HostMetadata="
+    line: "HostMetadata={{ zabbix_host_metadata }}, Hardware {{ zabbix_host_hardware }}, OS {{ zabbix_host_os }}, App {{ zabbix_host_app }}, SubApplication {{ zabbix_host_subapp }}, Env {{ zabbix_host_env }}"
+    path: /etc/zabbix/zabbix_agentd.conf
+  notify:
+    - restart zabbix_agent
+
+- name: Remove Hostname Line in /etc/zabbix/zabbix_agentd.conf
+  lineinfile:
+    regexp: "^Hostname="
+    path: /etc/zabbix/zabbix_agentd.conf
+    state: absent
+  notify:
+    - restart zabbix_agent
+
+- name: Configure HostnameItem in /etc/zabbix/zabbix_agentd.conf
+  lineinfile:
+    regexp: "^HostnameItem="
+    line: "HostnameItem=system.hostname"
+    path: /etc/zabbix/zabbix_agentd.conf
+  notify:
+    - restart zabbix_agent
+
+- name: Copy zabbix_agentd.d directory
+  copy:
+    src: files/zabbix_agentd.d
+    dest: /etc/zabbix/
+  notify:
+    - restart zabbix_agent
+
+- name: Copy zabbix sudoers file
+  copy:
+    src: files/sudoers.d/10_x5-zabbix
+    dest: /etc/sudoers.d/10_x5-zabbix
+
+- name: Change premissions for /var/log/messages
+  file:
+    path: /var/log/messages
+    mode: a+r
+  notify:
+    - restart zabbix_agent
+

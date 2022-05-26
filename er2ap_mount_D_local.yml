@@ -1,0 +1,60 @@
+---
+- name: Create and mount local D filesystem
+  hosts: er2_app_hosts
+  tasks:
+
+    - name: Get lvol list from inventory
+      set_fact: lvol_list="{{ lvols.split(',') }}"
+
+    - name: Create LV
+      lvol:
+        lv: "lv_{{ item }}_local"
+        size: 100G
+        state: present
+        vg: vg00
+      loop: "{{ lvol_list }}"
+    
+    - name: Create EXT4
+      filesystem:
+        dev: "/dev/vg00/lv_{{ item }}_local"
+        fstype: ext4
+      loop: "{{ lvol_list }}"
+
+#    - name: Mount device
+#      mount:
+#        path: "/usr/sap/ER2/{{ item }}_LOCAL"
+#        src: "/dev/vg00/lv_{{ item }}_local"
+#        state: present
+#        fstype: ext4
+#      loop:
+#        - "{{ lvol_list }}"
+
+
+    - name: Add to fstab
+      lineinfile:
+        backup: yes
+        line: "/dev/vg00/lv_{{ item }}_local /usr/sap/ER2/{{ item }}_LOCAL ext4 defaults 1 2"
+        path: /etc/fstab
+        regexp: "^/dev/vg00/lv_{{ item }}*"
+      loop: "{{ lvol_list }}"
+
+    - name: Create directory
+      file:
+        state: directory
+        path: "/usr/sap/ER2/{{ item }}_LOCAL"
+      loop: "{{ lvol_list }}"
+
+
+    - name: Mount
+      shell: "mount /usr/sap/ER2/{{ item }}_LOCAL"
+      loop: "{{ lvol_list }}"
+      ignore_errors: true
+
+    - name: Set ownership
+      file:
+        state: directory
+        group: sapsys
+        owner: er2adm
+        path: "/usr/sap/ER2/{{ item }}_LOCAL"
+      loop: "{{ lvol_list }}"
+

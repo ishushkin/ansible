@@ -1,0 +1,15 @@
+---
+#Lists hosts to be added to the /etc/hosts:
+add_hosts:
+  - name: fk2cidb
+    ip: 192.168.222.022
+  - name: 
+    ip: 192.168.333.033
+
+#List hosts aimed to be removed from the /etc/hosts:
+del_hosts:
+  - name: fk2db
+    ip: 192.168.237.13
+  - name:
+    ip:
+

@@ -1,0 +1,13 @@
+---
+- name: Restore original /etc/hosts file
+  become: true
+  hosts: dev/test/prod
+  tasks:
+     - name: Restoring /etc/hosts file
+       copy:
+           src: /etc/hosts.{{ ansible_date_time.date }}
+           dest: /etc/hosts
+           owner: root
+           group: root
+           mode: 0644
+           remote_src: yes

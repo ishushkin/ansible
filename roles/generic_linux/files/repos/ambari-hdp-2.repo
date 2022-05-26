@@ -1,0 +1,15 @@
+[HDP-UTILS-1.1.0.22-repo-2]
+name=HDP-UTILS-1.1.0.22-repo-2
+baseurl=http://msk-kltn-upd002.x5.ru/pulp/repos/X5/Library/custom/HDP-3_1_4_0/HDP-UTILS-1_1_0_22
+
+path=/
+enabled=1
+gpgcheck=0
+[HDP-3.1-repo-2]
+name=HDP-3.1-repo-2
+baseurl=http://msk-kltn-upd002.x5.ru/pulp/repos/X5/Library/custom/HDP-3_1_4_0/HDP-3_1_4_0
+
+path=/
+enabled=1
+gpgcheck=0
+

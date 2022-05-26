@@ -1,0 +1,10 @@
+---
+- name: Change password on hosts
+  hosts: change_pw
+  vars:
+#    mypw: 
+  tasks:
+    - name: Change PW
+      user:
+        name: root
+        password: "{{ mypw | password_hash('sha512') }}"

@@ -1,0 +1,269 @@
+---    
+- name: Disable some services
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - firewalld
+    - NetworkManager
+
+- name: Disable SELINUX
+  selinux:
+    state: disabled      
+
+- name: Unregister with Satellite
+  redhat_subscription:
+    state: absent
+  ignore_errors: true
+
+- name: Clean yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: absent
+
+- name: Create yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+
+- name: Add temporary repo from ansible host
+  yum_repository:
+    name: temp_x5
+    description: Temp X5 Repo
+    file: ansible_repos
+    baseurl: ftp://192.168.58.82/pub/Distr/CentOS_REPO/centos7.9
+    gpgcheck: no
+
+
+- name: Copy subscription manager RPMs
+  copy:
+    src: /share/pub/Distr/Centos_RPMS/
+    dest: /tmp
+
+- name: Install subscription manager RPMs
+  shell: yum localinstall -y /tmp/subscription-manager* /tmp/python-syspurpose*
+
+- name: Clean yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: absent
+
+- name: Create yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+
+- name: Copy resolv.conf
+  copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    mode: 0644
+
+
+- name: Install katello
+  shell: yum localinstall -y http://msk-dpro-upd005.x5.ru/pub/katello-ca-consumer-latest.noarch.rpm
+
+- name: Register with Satellite
+  redhat_subscription:
+    activationkey: "Centos 7.9"
+    org_id: "X5_Retail_Group"
+    force_register: yes
+
+
+- name: Install packages
+  yum:
+    disable_gpg_check: yes
+    name:
+      - net-tools
+      - sysstat
+      - wget
+      - zabbix-agent
+      - mc
+      - ntp
+      - telnet
+      - compat-libstdc++-33
+      - libstdc++
+      - libstdc++-devel
+      - gcc-c++
+      - libaio-devel
+      - ksh
+      - at
+      - "@'X Window System'"
+      - "@'network-file-system-client'"
+      - "@'performance'"
+      - glibc
+      - systemd
+      - autoconf
+      - automake
+      - cyrus-sasl
+      - expat
+      - fontconfig
+      - freetype
+      - glibc
+      - glibc-devel
+      - keyutils-libs
+      - krb5-libs
+      - libcom_err
+      - libgcc
+      - libidn
+      - libidn-devel
+      - libselinux
+      - libssh2
+      - libX11
+      - libXau
+      - libxcb
+      - nspr
+      - nss
+      - nss-softokn
+      - nss-softokn-freebl
+      - nss-util
+      - openldap
+      - openssl
+      - transfig
+      - zlib
+      - uuidd
+    state: installed
+  ignore_errors: true
+
+
+#- name: Register with Satellite
+#  redhat_subscription:
+#    activationkey: "rhel7-sap"
+#    org_id: "X5_Retail_Group"
+#    force_register: yes
+#
+#- name: Install packages
+#  yum:
+#    disable_gpg_check: yes
+#    name:
+#      - compat-locales-sap
+#      - resource-agents-sap
+#      - tuned-profiles-sap
+#      - sapconf
+#    state: installed
+
+- name: Enable Time Sync using NTPD
+  copy:
+    src: files/ntp.conf
+    dest: /etc/ntp.conf
+  notify: restart ntpd
+
+- name: Set NTPD options
+  lineinfile:
+    regexp: "^OPTIONS="
+    line: OPTIONS="-x -u ntp:ntp -p /var/run/ntpd.pid"
+    path: /etc/sysconfig/ntpd
+  notify: restart ntpd
+
+- name: Enable NTPD Service
+  service:
+    name: ntpd.service
+    state: started
+    enabled: true
+
+- name: Copy /etc/security/limits.d
+  copy:
+    src: files/limits.d/
+    dest: /etc/security/limits.d
+
+- name: Copy /etc/tmpfiles.d/
+  copy:
+    src: files/tmpfiles.d/
+    dest: /etc/tmpfiles.d
+
+- name: Create sysctl.d from template
+  template:
+    src: templates/sysctl.d/sap.j2
+    dest: /etc/sysctl.d/sap.conf
+
+- name: Change password policy 1
+  lineinfile:
+    path: /etc/pam.d/system-auth
+    insertbefore: "auth        required      pam_env.so"
+    line: "auth        required      pam_tally2.so deny=6 onerr=fail unlock_time=300"
+    firstmatch: yes
+    backup: yes
+
+- name: Change password policy 2
+  lineinfile:
+    path: /etc/pam.d/system-auth
+    regexp: "password        requisite      pam_pwquality.so"
+    line: "password        requisite      pam_pwquality.so try_first_pass retry=3 minlen=12 retry=6 dcredit=-1 lcredit=-1 type="
+    backup: yes
+
+- name: Change password policy 3
+  lineinfile:
+    path: /etc/pam.d/password-auth
+    insertbefore: "auth        required      pam_env.so"
+    line: "auth            required        pam_tally2.so deny=6 onerr=fail unlock_time=300"
+    backup: yes
+
+- name: Copy /etc/sudoers.d/
+  copy:
+    src: files/sudoers.d/
+    dest: /etc/sudoers.d
+
+- name: Create support user for X5
+  user:
+    name: support
+
+- name: Add ssh public key for support user X5
+  lineinfile:
+    path: /home/support/.ssh/authorized_keys
+    line: "{{ support_public_key }}"
+    create: yes
+
+
+- name: Copy NMON binary
+  copy:
+    src: files/nmon
+    dest: /usr/bin
+    mode: 755
+
+- name: Copy NMON scripts
+  copy:
+    src: files/nmon_stat/
+    dest: /usr/sap/scripts/nmon_stat
+    mode: 755
+
+- name: Add nmon entry to crontab
+  cron:
+    minute: '0'
+    hour: '0'
+    day: '*'
+    month: '*'
+    weekday: '*'
+    job: /usr/sap/scripts/nmon_stat/nmon_stat.sh
+    name: NMON daily start
+
+- name: Add test_nmon entry to crontab
+  cron:
+    minute: '*'
+    hour: '*'
+    day: '*'
+    month: '*'
+    weekday: '*'
+    job: /usr/sap/scripts/nmon_stat/test_nmon_stat.sh
+    name: NMON restart if failed
+
+- name: Copy Networker files
+  copy:
+    src: /share/pub/Distr/Networker/networker_19.1.0.3/
+    dest: /tmp/networker_19.1.0.3
+
+- name: Install Networker Client
+  yum:
+    name:
+      - /tmp/networker_19.1.0.3/lgtoclnt-19.1.0.3-1.x86_64.rpm
+      - /tmp/networker_19.1.0.3/lgtoman-19.1.0.3-1.x86_64.rpm
+      - /tmp/networker_19.1.0.3/lgtonmsap-19.1.0.3-1.x86_64.rpm
+      - /tmp/networker_19.1.0.3/lgtoxtdclnt-19.1.0.3-1.x86_64.rpm
+
+#- name: Unregister with Satellite
+#  redhat_subscription:
+#    state: absent
+
+- name: Reboot host
+  reboot:
+  tags: never

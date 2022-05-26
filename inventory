@@ -57,6 +57,7 @@ msk-rcod-ora008
 msk-rcod-ora009
 msk-rcod-ora010
 msk-sap-strnode001
+msk-sap-strnode002
 nimsrv
 pd2cidb-1
 pd2cidb-2
@@ -168,6 +169,141 @@ lmxcidb
 msk-sap-frm001
 msk-sap-jmp002
 msk-gw0cidb
+kp1cidb
+fk0cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Dev"
+fk5ap01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk5ap02 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+if2app01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
+if2app02 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
+fk0cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Dev"
+ee2cidb
+msk-gw1cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="GD" zabbix_host_env="Test"
+msk-gw1cidb-new
+msk-gw2cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="GD" zabbix_host_env="Prod"
+msk-gw2cidb-new
+MSK-SAP-FK1DB-new
+MSK-SAP-FW0CIDB-new
+cc2cidb-new
+msk-gw1wd01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="GW" zabbix_host_env="Test"
+msk-gw1wd01-new
+msk-gw2wd01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="GW" zabbix_host_env="Prod"
+msk-gw2wd01-new
+if1app01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Test"
+if1app01-new
+if1app02 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Test"
+if1app02-new
+sr1wdisp
+sr2wdisp
+fw0cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FW" zabbix_host_env="Dev"
+fw5cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FW" zabbix_host_env="Test"
+fk5cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk4cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Dev"
+fk1db zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk1ap01 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk1ap02 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk1ads zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Test"
+fk2ads zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Prod"
+fk4cidb-new
+sr0cidb-new
+sr1cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="SRM" zabbix_host_env="Test"
+sr2cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="SRM" zabbix_host_env="Prod"
+fw2db zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FW" zabbix_host_env="Prod"
+fw2stb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FW" zabbix_host_env="Prod"
+
+fw1db zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FW" zabbix_host_env="Test"
+sr0cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="SRM" zabbix_host_env="Dev"
+fk2db zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Prod"
+fk2stb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="FK" zabbix_host_env="Prod"
+grtcidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="GR" zabbix_host_env="Dev"
+at2cidb zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="AT" zabbix_host_env="Prod"
+
+192.168.237.22
+192.168.237.44
+
+[ifnew]
+192.168.239.137 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
+192.168.239.138 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
+192.168.239.74 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
+192.168.239.70 zabbix_host_hardware="VM" zabbix_host_os="Linux Server" zabbix_host_app="SAP" zabbix_host_subapp="IF" zabbix_host_env="Prod"
 
 [hr_ap_hosts]
 hr1ap02
+hr1-ads
+hr2-ads
+
+[nw_str_nodes]
+sap-dtln-nws941
+sap-dtln-nws942
+
+[er2_app_hosts]
+er2ap01 lvols=D00
+er2ap03 lvols=D02
+er2ap05 lvols=D04
+er2ap06 lvols=D05
+er2ap07 lvols=D06
+er2ap08 lvols=D07
+er2ap10 lvols=D09
+er2ap11 lvols=D10
+er2ap12 lvols=D11
+er2ap14 lvols=D13
+er2ap15 lvols=D14
+er2ap50 lvols=D50
+er2ap51 lvols=D52
+er2ap52 lvols=D54
+er2ap53 lvols=D56
+er2ap54 lvols=D58
+er2ap55 lvols=D60
+er2ap56 lvols=D62
+er2ap57 lvols=D64
+er2ap58 lvols=D66
+er2ap59 lvols=D68
+er2ap04 lvols=D03,D76
+er2ap13 lvols=D12,D78
+er2ap24 lvols=D23,D82
+er2ap27 lvols=D26,D72
+er2ap29 lvols=D28,D74
+er2ap39 lvols=D38,D80
+
+[er1_app_hosts]
+er1ap04 lvols=D03,D64
+er1ap44 lvols=D44
+er1ap45 lvols=D45
+er1ap46 lvols=D46
+er1ap47 lvols=D47
+er1ap48 lvols=D48
+er1ap49 lvols=D49
+er1ap50 lvols=D50
+er1ap51 lvols=D51
+er1ap52 lvols=D52
+er1ap53 lvols=D53
+er1ap54 lvols=D54
+er1ap55 lvols=D55
+er1ap56 lvols=D56
+
+[sapcartest]
+catcsdb1-mgmt
+catcsdb2-mgmt
+catapp1-mgmt
+catapp2-mgmt
+
+[sapcarprod]
+ca2csdb1
+ca2csdb2
+ca2ap01
+ca2ap02
+ca2ap03
+ca1ap01
+ca1ap02
+ca1ap03
+ca1cs
+ca0csdb
+hcpdb
+ca0ap01
+
+[new20052022]
+fk1ci-new
+fk1wd01-new
+fk2ci-new
+fk2ap01-new
+fk2ap02-new
+fk2wd01-new

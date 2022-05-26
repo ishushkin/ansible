@@ -1,0 +1,54 @@
+---
+- name: Exchange local D* filesystems
+  hosts: er1_app_hosts
+#  hosts: er1ap44
+  tasks:
+
+    - name: Get lvol list from inventory
+      set_fact: lvol_list="{{ lvols.split(',') }}"
+
+#    - name: Mount device
+#      mount:
+#        path: "/usr/sap/ER1/{{ item }}_LOCAL"
+#        src: "/dev/vg00/lv_{{ item }}_local"
+#        state: present
+#        fstype: ext4
+#      loop:
+#        - "{{ lvol_list }}"
+
+    - name: Umount dirs
+      mount:
+        path: "/usr/sap/ER1/{{ item }}_LOCAL"
+        state: unmounted
+        fstype: ext4
+      loop: "{{ lvol_list }}"
+
+    - name: Umount dirs 2
+      mount:
+        path: "/usr/sap/ER1/{{ item }}"
+        state: unmounted
+        fstype: nfs
+      loop: "{{ lvol_list }}"
+
+    - name: Change fstab
+      lineinfile:
+        backup: yes
+        line: "/dev/mapper/vg00-lv_{{ item }}_LOCAL /usr/sap/ER1/{{ item }} ext4 defaults 0 0"
+        path: /etc/fstab
+        regexp: "^/dev/mapper/vg00-lv_{{ item }}*"
+      loop: "{{ lvol_list }}"
+
+    - name: Mount
+      shell: "mount /usr/sap/ER1/{{ item }}"
+      loop: "{{ lvol_list }}"
+      ignore_errors: true
+
+    - name: Mount NFS
+      shell: "mount -t nfs4 -o rw -o soft er1cidb:/usr/sap/ER1/{{ item }} /usr/sap/ER1/{{ item }}_LOCAL"
+      loop: "{{ lvol_list }}"
+      ignore_errors: true
+
+#    - name: Mount exe_linux
+#      shell: "mount -t nfs4 -o rw -o soft er1cidb:/sapmnt/ER1/exe_linux /sapmnt/ER1/exe"
+#      ignore_errors: true
+

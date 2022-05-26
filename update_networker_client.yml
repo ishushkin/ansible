@@ -1,0 +1,28 @@
+---
+- name: Update Networker Client
+  hosts: msk-gw1wd01,msk-gw2wd01,sr1wdisp,sr2wdisp
+  tasks:
+
+  - name: Copy Networker files
+    copy:
+      src: /share/pub/Distr/Networker/networker_19.1.0.3/
+      dest: /tmp/networker_19.1.0.3
+  
+  - name: Install Networker Client
+    yum:
+      name:
+        - /tmp/networker_19.1.0.3/lgtoclnt-19.1.0.3-1.x86_64.rpm
+        - /tmp/networker_19.1.0.3/lgtoman-19.1.0.3-1.x86_64.rpm
+        - /tmp/networker_19.1.0.3/lgtoxtdclnt-19.1.0.3-1.x86_64.rpm
+
+  - name: Start Networker Client
+    service:
+      name: networker
+      state: restarted
+      enabled: yes
+
+  - name: Install Networker NMSAP
+    yum:
+      name:
+        - /tmp/networker_19.1.0.3/lgtonmsap-19.1.0.3-1.x86_64.rpm
+

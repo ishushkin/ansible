@@ -1,0 +1,58 @@
+---
+- name: Exchange local D* filesystems
+  hosts: er2_app_hosts
+  tasks:
+
+    - name: Get lvol list from inventory
+      set_fact: lvol_list="{{ lvols.split(',') }}"
+
+#    - name: Mount device
+#      mount:
+#        path: "/usr/sap/ER2/{{ item }}_LOCAL"
+#        src: "/dev/vg00/lv_{{ item }}_local"
+#        state: present
+#        fstype: ext4
+#      loop:
+#        - "{{ lvol_list }}"
+
+    - name: Umount dirs
+      mount:
+        path: "/usr/sap/ER2/{{ item }}_LOCAL"
+        state: unmounted
+        fstype: ext4
+      loop: "{{ lvol_list }}"
+
+    - name: Umount dirs 2
+      mount:
+        path: "/usr/sap/ER2/{{ item }}"
+        state: unmounted
+        fstype: ext4
+      loop: "{{ lvol_list }}"
+
+    - name: Change fstab
+      lineinfile:
+        backup: yes
+        line: "/dev/vg00/lv_{{ item }}_local /usr/sap/ER2/{{ item }}_LOCAL ext4 defaults 1 2"
+        path: /etc/fstab
+        regexp: "^/dev/vg00/lv_{{ item }}*"
+      loop: "{{ lvol_list }}"
+
+    - name: Change fstab 2
+      lineinfile:
+        backup: yes
+        line: "/dev/vg_{{ item }}/lv_{{ item }} /usr/sap/ER2/{{ item }} ext4 defaults 1 2"
+        path: /etc/fstab
+        regexp: "^/dev/vg_{{ item }}/lv_{{ item }}*"
+      loop: "{{ lvol_list }}"
+
+
+    - name: Mount
+      shell: "mount /usr/sap/ER2/{{ item }}_LOCAL"
+      loop: "{{ lvol_list }}"
+      ignore_errors: true
+
+    - name: Mount 2
+      shell: "mount /usr/sap/ER2/{{ item }}"
+      loop: "{{ lvol_list }}"
+      ignore_errors: true
+
